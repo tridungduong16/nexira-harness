@@ -12,24 +12,24 @@ it('ships install metadata with the built web application', async () => {
   const manifest: unknown = JSON.parse(await readFile(join(DIST_ROOT, 'manifest.webmanifest'), 'utf8'))
   expect(manifest).toEqual({
     id: '/',
-    name: 'DeepSeek Harness',
-    short_name: 'DSH',
+    name: 'Qonnex Harness',
+    short_name: 'Qonnex',
     start_url: '/',
     scope: '/',
     display: 'fullscreen',
     icons: [{
-      src: '/favicon.svg',
-      sizes: 'any',
-      type: 'image/svg+xml',
+      src: '/favicon.png',
+      sizes: '512x512',
+      type: 'image/png',
       purpose: 'any',
     }],
   })
 })
 
-it('ships a favicon that switches to a light mark under dark color scheme', async () => {
-  const favicon = await readFile(join(DIST_ROOT, 'favicon.svg'), 'utf8')
-  // The light fill must live inside the dark-scheme media query, so the icon
-  // stays black in light mode and only turns white under a dark scheme.
-  expect(favicon).toMatch(/@media \(prefers-color-scheme: dark\)\s*{\s*path\s*{[^}]*fill:\s*#fff/i)
-  expect(favicon).toContain('fill="#000"')
+it('ships the Qonnex PNG favicon and brand mark', async () => {
+  const pngSignature = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])
+  const favicon = await readFile(join(DIST_ROOT, 'favicon.png'))
+  const mark = await readFile(join(DIST_ROOT, 'qonnex-mark.png'))
+  expect(favicon.subarray(0, pngSignature.length)).toEqual(pngSignature)
+  expect(mark.subarray(0, pngSignature.length)).toEqual(pngSignature)
 })

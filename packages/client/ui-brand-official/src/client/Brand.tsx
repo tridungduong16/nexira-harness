@@ -1,19 +1,27 @@
-import { BrandWordmark, FishLogo } from '@deepseek-ai/dsh-client-ui-primitives'
-import type { SidebarBrandMarkOwnerProps } from '@deepseek-ai/dsh-client-ui-sidebar/client'
+import type { PropsLocale } from '@deepseek-ai/dsh-client-ui-slots'
+import type { HeroBrandMarkOwnerProps } from '@deepseek-ai/dsh-client-ui-conversation/client'
+import css from './Brand.module.css'
 
 /**
- * Render the official mark with the presentation requested by its host surface.
+ * Render the Qonnex mark with the presentation requested by its host surface.
  * @param props - Host-supplied mark presentation.
- * @returns the official whale mark.
+ * @returns the decorative Qonnex mark.
  */
-export function OfficialBrandMark({ size }: SidebarBrandMarkOwnerProps) {
-  return <FishLogo size={size} />
+export function OfficialBrandMark({ size, className }: HeroBrandMarkOwnerProps) {
+  return (
+    <span
+      className={[css.mark, className].filter(Boolean).join(' ')}
+      style={{ width: size, height: size }}
+      aria-hidden="true"
+    />
+  )
 }
 
 /**
- * Render the official name artwork without its independently slotted mark.
- * @returns the official name wordmark.
+ * Render the localized Qonnex product name without its independently slotted mark.
+ * @param props - Framework-supplied common locale seat.
+ * @returns the Qonnex product name.
  */
-export function OfficialBrandName() {
-  return <BrandWordmark includeMark={false} />
+export function OfficialBrandName({ t }: PropsLocale<'common'>) {
+  return <span>{t('brand.productName')}</span>
 }

@@ -1,5 +1,5 @@
 ---
-description: "Official DeepSeek Harness brand occupants for the sidebar, active only in official builds; for users and maintainers choosing or replacing brand presentation."
+description: "Qonnex Harness brand occupants for the Web sidebar and blank-session hero; for users and maintainers choosing or replacing browser brand presentation."
 kind: "package-reference"
 ---
 
@@ -9,7 +9,7 @@ English | [中文](README.zh.md)
 
 ## Summary
 
-This package gives an `official` client build the DeepSeek Harness mark and name in the sidebar. Other build profiles keep the shell's fish mark and local-build label, while the conversation hero always uses the animated fish. Choose it for deployments branded as DeepSeek Harness; deployments with another identity should provide a replacement brand package. It has no runtime state and does not affect model requests.
+This package gives the Web client the Qonnex Harness mark and name in the sidebar and blank-session hero. It registers across build profiles so local and release builds share one product identity. Deployments with another identity should leave it out and provide a replacement brand package. It has no runtime state and does not affect model requests.
 
 ## Table of Contents
 
@@ -25,15 +25,15 @@ This package gives an `official` client build the DeepSeek Harness mark and name
 <a id="use-this-package"></a>
 ## Use this package
 
-Mount this plugin in the browser roster of a deployment whose identity is DeepSeek's own, then build the client with the `official` profile so the occupants register.
+Mount this plugin in the browser roster of a Qonnex Harness deployment. The shipped Web application supplies `/qonnex-mark.png`, which the mark occupant uses as a theme-colored mask.
 
-### Choosing the profile
+### Brand registration
 
-`DSH_CLIENT_BUILD_PROFILE` selects which brand renders. An `official` build shows the official mark and name in the sidebar; any other value leaves the shell fallbacks — the fish mark and the local-build label — in place. The conversation hero shows the animated hero fish from `dsh-client-ui-conversation` regardless of profile, because that fallback is already the official mark. The plugin still loads and validates in both cases; only the registration is profile-gated.
+The package fills `sidebar.brand.mark`, `sidebar.brand.name`, and `conversation.hero.brand.mark` in every build profile. The shared `common` locale dictionary owns the visible product name, while the mark follows the color of its host surface.
 
 ### Replacing the brand
 
-A deployment with its own identity leaves this package out and composes another package that occupies the sidebar slots — and the hero slot, which this package leaves on its fallback. Occupying a slot is the only composition route; there is no brand configuration surface here.
+A deployment with its own identity leaves this package out and composes another package that occupies the two sidebar slots and the hero slot. Occupying a slot is the only composition route; there is no brand configuration surface here.
 
 -----
 
@@ -43,7 +43,7 @@ A deployment with its own identity leaves this package out and composes another 
 <details>
 <summary>Implementation internals — click to expand</summary>
 
-The two occupants install as one declaration-aware registration set: nested `ctx.slots.inject()` calls wait on the sidebar declaration, so the set works whether this row activates before or after the declarer, withdraws both occupants when the declaration collapses, and leaves no partial brand mix during HMR. The browser half is [`src/client/index.ts`](src/client/index.ts); the node half is an empty Loader seat. The browser title is a build-environment concern (`DSH_CLIENT_TITLE`), outside the slot system.
+The three occupants install as one declaration-aware registration set: nested `ctx.slots.inject()` calls wait on every sidebar and hero declaration, so the set works whether this row activates before or after the declarers, withdraws all occupants when a declaration collapses, and leaves no partial brand mix during HMR. The browser half is [`src/client/index.ts`](src/client/index.ts); the node half is an empty Loader seat. The browser title is a build-environment concern (`DSH_CLIENT_TITLE`), outside the slot system.
 
 </details>
 
@@ -78,6 +78,7 @@ These limits define how brand presentation is supplied. They are current package
 
 - **One occupant set** — alternative presentation belongs in another Cordis package occupying the same slots.
 - **The browser title is independent** — `DSH_CLIENT_TITLE` selects title text at build time rather than through a UI slot.
+- **The mark is a Web asset** — a composition that reuses this package outside the shipped Web application must serve `/qonnex-mark.png` itself.
 
 <a id="dev-note"></a>
 ### Dev Note

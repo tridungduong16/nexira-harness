@@ -1,0 +1,6 @@
+.mark {
+  display: block;
+  flex: none;
+  background-color: currentColor;
+  mask: url('/qonnex-mark.png') center / contain no-repeat;
+}
